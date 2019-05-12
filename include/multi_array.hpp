@@ -26,7 +26,7 @@
 #include <cassert> // assert.
 #include <cstddef> // std::size_t.
 #include <cstdint> // std::intptr_t.
-#include <cstring> // std::std::memcpy.
+#include <cstring> // std::memcpy.
 
 #include <array>
 #include <type_traits>
@@ -71,49 +71,50 @@ class Vector {
 
     using extents_type = std::array<std::intptr_t, 1>;
 
-    [[nodiscard]] reference at ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( const std::intptr_t i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data - BaseI )[ i_ ];
     }
 
-    [[nodiscard]] value_type at ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data - BaseI )[ i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference rat ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( const std::intptr_t i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data + I - 1 + BaseI )[ -i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type rat ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data + I - 1 + BaseI )[ -i_ ];
     }
 
-    [[nodiscard]] pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] const_pointer data ( ) const noexcept { return m_data; }
+    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
+    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
 
-    [[nodiscard]] iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
+    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I; }
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I }; }
 };
 
@@ -149,7 +150,7 @@ class Matrix {
 
     using extents_type = std::array<std::intptr_t, 2>;
 
-    [[nodiscard]] const_reference ref ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] constexpr const_reference ref ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -157,7 +158,7 @@ class Matrix {
         return ( m_data - BaseJ - BaseI * J )[ j_ + i_ * J ];
     }
 
-    [[nodiscard]] reference at ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -165,7 +166,7 @@ class Matrix {
         return ( m_data - BaseJ - BaseI * J )[ j_ + i_ * J ];
     }
 
-    [[nodiscard]] value_type at ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -174,7 +175,7 @@ class Matrix {
     }
 
     // Reverse ref (rref).
-    [[nodiscard]] const_reference rref ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] constexpr const_reference rref ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -183,7 +184,7 @@ class Matrix {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference rat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -192,7 +193,7 @@ class Matrix {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type rat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -200,23 +201,24 @@ class Matrix {
         return ( m_data + I * J - 1 + BaseJ + BaseI * J )[ -j_ - i_ * J ];
     }
 
-    [[nodiscard]] pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] const_pointer data ( ) const noexcept { return m_data; }
+    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
+    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
 
-    [[nodiscard]] iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
+    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J; }
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J }; }
 };
 
@@ -260,7 +262,7 @@ class Cube {
 
     using extents_type = std::array<std::intptr_t, 3>;
 
-    [[nodiscard]] reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -270,7 +272,8 @@ class Cube {
         return ( m_data + K * ( -BaseJ - BaseI * J ) - BaseK )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const
+        noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -281,7 +284,7 @@ class Cube {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference rat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -292,7 +295,8 @@ class Cube {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type rat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const
+        noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -302,23 +306,24 @@ class Cube {
         return ( m_data + I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK )[ K * ( -j_ - i_ * J ) - k_ ];
     }
 
-    [[nodiscard]] pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] const_pointer data ( ) const noexcept { return m_data; }
+    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
+    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
 
-    [[nodiscard]] iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
+    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K; }
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J, K }; }
 };
 
@@ -354,8 +359,8 @@ class HyperCube {
 
     using extents_type = std::array<std::intptr_t, 4>;
 
-    [[nodiscard]] reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
-                                 const std::intptr_t l_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
+                                           const std::intptr_t l_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -367,8 +372,8 @@ class HyperCube {
         return ( m_data + L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
-                                  const std::intptr_t l_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
+                                            const std::intptr_t l_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -380,23 +385,24 @@ class HyperCube {
         return ( m_data + L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] const_pointer data ( ) const noexcept { return m_data; }
+    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
+    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
 
-    [[nodiscard]] iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
+    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
+    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
+    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
+    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K * L; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K * L; }
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J, K, L }; }
 };
 
