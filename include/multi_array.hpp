@@ -28,7 +28,7 @@
 #include <cstdint> // std::intptr_t
 #include <cstring> // std::memcpy
 
-#include <array>
+#include <tuple>
 #include <type_traits>
 #include <utility> // std::forward
 
@@ -69,9 +69,9 @@ class Vector {
     Vector ( const Vector & v_ ) noexcept { std::memcpy ( m_data, v_.m_data, I * sizeof ( T ) ); }
     Vector ( Vector && v_ ) noexcept { std::memcpy ( m_data, v_.m_data, I * sizeof ( T ) ); }
     template<typename... Args>
-    Vector ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+    constexpr Vector ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
-    using extents_type = std::array<std::intptr_t, 1>;
+    using extents_type = std::tuple<std::intptr_t>;
 
     [[nodiscard]] constexpr reference at ( const std::intptr_t i_ ) noexcept {
         assert ( i_ >= BaseI );
@@ -117,7 +117,7 @@ class Vector {
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I; }
     [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I }; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I }; }
 };
 
 template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
@@ -145,9 +145,9 @@ class Matrix {
     Matrix ( const Matrix & m_ ) noexcept { std::memcpy ( m_data, m_.m_data, I * J * sizeof ( T ) ); }
     Matrix ( Matrix && m_ ) noexcept { std::memcpy ( m_data, m_.m_data, I * J * sizeof ( T ) ); }
     template<typename... Args>
-    Matrix ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+    constexpr Matrix ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
-    using extents_type = std::array<std::intptr_t, 2>;
+    using extents_type = std::tuple<std::intptr_t, std::intptr_t>;
 
     [[nodiscard]] constexpr const_reference ref ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
         assert ( i_ >= BaseI );
@@ -218,7 +218,7 @@ class Matrix {
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J; }
     [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J }; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J }; }
 };
 
 template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
@@ -254,9 +254,9 @@ class Cube {
     Cube ( const Cube & c_ ) noexcept { std::memcpy ( m_data, c_.m_data, I * J * K * sizeof ( T ) ); }
     Cube ( Cube && c_ ) noexcept { std::memcpy ( m_data, c_.m_data, I * J * K * sizeof ( T ) ); }
     template<typename... Args>
-    Cube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+    constexpr Cube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
-    using extents_type = std::array<std::intptr_t, 3>;
+    using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t>;
 
     [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
         assert ( i_ >= BaseI );
@@ -320,7 +320,7 @@ class Cube {
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K; }
     [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J, K }; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K }; }
 };
 
 template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t K, std::intptr_t L, std::intptr_t BaseI = 0,
@@ -348,9 +348,9 @@ class HyperCube {
     HyperCube ( const HyperCube & h_ ) noexcept { std::memcpy ( m_data, h_.m_data, I * J * K * L * sizeof ( T ) ); }
     HyperCube ( HyperCube && h_ ) noexcept { std::memcpy ( m_data, h_.m_data, I * J * K * L * sizeof ( T ) ); }
     template<typename... Args>
-    HyperCube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+    constexpr HyperCube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
-    using extents_type = std::array<std::intptr_t, 4>;
+    using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t, std::intptr_t>;
 
     [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
                                            const std::intptr_t l_ ) noexcept {
@@ -396,7 +396,7 @@ class HyperCube {
 
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K * L; }
     [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K * L; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J, K, L }; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K, L }; }
 };
 
 }; // namespace sax

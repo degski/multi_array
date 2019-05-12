@@ -42,7 +42,11 @@
 
 int main ( ) {
 
-    sax::Vector<int, 10> v{ 1, 2, 3, 4, 5, 6, 7, 8 };
+    constexpr sax::Vector<int, 10, 5> v{ 1, 2, 3, 4, 5, 6, 7, 8 };
+
+    int i = v.at ( 8 );
+
+    std::cout << i << nl;
 
     for ( auto & e : v )
         std::cout << e << ' ';
