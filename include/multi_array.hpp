@@ -54,10 +54,9 @@ class Vector {
     using const_reference = value_type const &;
     using rv_reference    = value_type &&;
 
-    using size_type = std::size_t;
-    using signed_size_type =
-        typename std::conditional<std::is_same<size_type, std::uint32_t>::value, std::int32_t, std::int64_t>::type;
-    using difference_type = signed_size_type;
+    using size_type        = std::size_t;
+    using signed_size_type = std::make_signed_t<size_type>;
+    using difference_type  = signed_size_type;
 
     using iterator               = pointer;
     using const_iterator         = const_pointer;
@@ -133,10 +132,9 @@ class Matrix {
     using const_reference = value_type const &;
     using rv_reference    = value_type &&;
 
-    using size_type = std::size_t;
-    using signed_size_type =
-        typename std::conditional<std::is_same<size_type, std::uint32_t>::value, std::int32_t, std::int64_t>::type;
-    using difference_type = signed_size_type;
+    using size_type        = std::size_t;
+    using signed_size_type = std::make_signed_t<size_type>;
+    using difference_type  = signed_size_type;
 
     using iterator               = pointer;
     using const_iterator         = const_pointer;
@@ -245,10 +243,9 @@ class Cube {
     using const_reference = value_type const &;
     using rv_reference    = value_type &&;
 
-    using size_type = std::size_t;
-    using signed_size_type =
-        typename std::conditional<std::is_same<size_type, std::uint32_t>::value, std::int32_t, std::int64_t>::type;
-    using difference_type = signed_size_type;
+    using size_type        = std::size_t;
+    using signed_size_type = std::make_signed_t<size_type>;
+    using difference_type  = signed_size_type;
 
     using iterator               = pointer;
     using const_iterator         = const_pointer;
@@ -340,10 +337,9 @@ class HyperCube {
     using const_reference = value_type const &;
     using rv_reference    = value_type &&;
 
-    using size_type = std::size_t;
-    using signed_size_type =
-        typename std::conditional<std::is_same<size_type, std::uint32_t>::value, std::int32_t, std::int64_t>::type;
-    using difference_type = signed_size_type;
+    using size_type        = std::size_t;
+    using signed_size_type = std::make_signed_t<size_type>;
+    using difference_type  = signed_size_type;
 
     using iterator               = pointer;
     using const_iterator         = const_pointer;
