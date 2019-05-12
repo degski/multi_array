@@ -35,12 +35,16 @@
 //  pointers [pointing outside the array m_data] in order to gain efficiency when dealing with
 //  off-zero indices.
 
-namespace ma {
+namespace sax {
+
+namespace detail {
 
 template<typename T>
-using is_valid_type = std::enable_if_t<std::conjunction<std::is_default_constructible<T>, std::is_trivially_copyable<T>>::value, T>;
+using is_valid_multi_array_type =
+    std::enable_if_t<std::conjunction<std::is_default_constructible<T>, std::is_trivially_copyable<T>>::value, T>;
+}
 
-template<typename T, std::intptr_t I, std::intptr_t BaseI = 0, typename = is_valid_type<T>>
+template<typename T, std::intptr_t I, std::intptr_t BaseI = 0, typename = detail::is_valid_multi_array_type<T>>
 class Vector {
 
     T m_data[ I ];
@@ -119,7 +123,7 @@ class Vector {
 };
 
 template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
-         typename = is_valid_type<T>>
+         typename = detail::is_valid_multi_array_type<T>>
 class Matrix {
 
     T m_data[ I * J ];
@@ -231,7 +235,7 @@ template<typename T, std::intptr_t J, std::intptr_t I, std::intptr_t BaseJ = 0, 
 using MatrixCM = Matrix<T, J, I, BaseJ, BaseI>;
 
 template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t K, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
-         std::intptr_t BaseK = 0, typename = is_valid_type<T>>
+         std::intptr_t BaseK = 0, typename = detail::is_valid_multi_array_type<T>>
 class Cube {
 
     T m_data[ I * J * K ];
@@ -328,7 +332,7 @@ class Cube {
 };
 
 template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t K, std::intptr_t L, std::intptr_t BaseI = 0,
-         std::intptr_t BaseJ = 0, std::intptr_t BaseK = 0, std::intptr_t BaseL = 0, typename = is_valid_type<T>>
+         std::intptr_t BaseJ = 0, std::intptr_t BaseK = 0, std::intptr_t BaseL = 0, typename = detail::is_valid_multi_array_type<T>>
 class HyperCube {
 
     T m_data[ I * J * K * L ];
@@ -406,4 +410,4 @@ class HyperCube {
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return extents_type{ I, J, K, L }; }
 };
 
-}; // namespace ma
+}; // namespace sax

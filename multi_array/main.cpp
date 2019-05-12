@@ -42,7 +42,7 @@
 
 int main ( ) {
 
-    ma::Vector<int, 10> v{ 1, 2, 3, 4, 5, 6, 7, 8 };
+    sax::Vector<int, 10> v{ 1, 2, 3, 4, 5, 6, 7, 8 };
 
     for ( auto & e : v )
         std::cout << e << ' ';
