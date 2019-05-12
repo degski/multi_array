@@ -23,13 +23,14 @@
 
 #pragma once
 
-#include <cassert> // assert.
-#include <cstddef> // std::size_t.
-#include <cstdint> // std::intptr_t.
-#include <cstring> // std::memcpy.
+#include <cassert> // assert
+#include <cstddef> // std::size_t
+#include <cstdint> // std::intptr_t
+#include <cstring> // std::memcpy
 
 #include <array>
 #include <type_traits>
+#include <utility> // std::forward
 
 // This library invokes Undefined Behaviour (UB), as it exploits the pre-calculation of intermediate
 //  pointers [pointing outside the array m_data] in order to gain efficiency when dealing with
@@ -50,18 +51,15 @@ class Vector {
     T m_data[ I ];
 
     public:
-    using value_type    = T;
-    using pointer       = value_type *;
-    using const_pointer = value_type const *;
-
-    using reference       = value_type &;
-    using const_reference = value_type const &;
-    using rv_reference    = value_type &&;
-
-    using size_type        = std::size_t;
-    using signed_size_type = std::make_signed_t<size_type>;
-    using difference_type  = signed_size_type;
-
+    using value_type             = T;
+    using pointer                = value_type *;
+    using const_pointer          = value_type const *;
+    using reference              = value_type &;
+    using const_reference        = value_type const &;
+    using rv_reference           = value_type &&;
+    using size_type              = std::size_t;
+    using signed_size_type       = std::make_signed_t<size_type>;
+    using difference_type        = signed_size_type;
     using iterator               = pointer;
     using const_iterator         = const_pointer;
     using reverse_iterator       = pointer;
@@ -129,18 +127,15 @@ class Matrix {
     T m_data[ I * J ];
 
     public:
-    using value_type    = T;
-    using pointer       = value_type *;
-    using const_pointer = value_type const *;
-
-    using reference       = value_type &;
-    using const_reference = value_type const &;
-    using rv_reference    = value_type &&;
-
-    using size_type        = std::size_t;
-    using signed_size_type = std::make_signed_t<size_type>;
-    using difference_type  = signed_size_type;
-
+    using value_type             = T;
+    using pointer                = value_type *;
+    using const_pointer          = value_type const *;
+    using reference              = value_type &;
+    using const_reference        = value_type const &;
+    using rv_reference           = value_type &&;
+    using size_type              = std::size_t;
+    using signed_size_type       = std::make_signed_t<size_type>;
+    using difference_type        = signed_size_type;
     using iterator               = pointer;
     using const_iterator         = const_pointer;
     using reverse_iterator       = pointer;
@@ -241,18 +236,15 @@ class Cube {
     T m_data[ I * J * K ];
 
     public:
-    using value_type    = T;
-    using pointer       = value_type *;
-    using const_pointer = value_type const *;
-
-    using reference       = value_type &;
-    using const_reference = value_type const &;
-    using rv_reference    = value_type &&;
-
-    using size_type        = std::size_t;
-    using signed_size_type = std::make_signed_t<size_type>;
-    using difference_type  = signed_size_type;
-
+    using value_type             = T;
+    using pointer                = value_type *;
+    using const_pointer          = value_type const *;
+    using reference              = value_type &;
+    using const_reference        = value_type const &;
+    using rv_reference           = value_type &&;
+    using size_type              = std::size_t;
+    using signed_size_type       = std::make_signed_t<size_type>;
+    using difference_type        = signed_size_type;
     using iterator               = pointer;
     using const_iterator         = const_pointer;
     using reverse_iterator       = pointer;
@@ -338,18 +330,15 @@ class HyperCube {
     T m_data[ I * J * K * L ];
 
     public:
-    using value_type    = T;
-    using pointer       = value_type *;
-    using const_pointer = value_type const *;
-
-    using reference       = value_type &;
-    using const_reference = value_type const &;
-    using rv_reference    = value_type &&;
-
-    using size_type        = std::size_t;
-    using signed_size_type = std::make_signed_t<size_type>;
-    using difference_type  = signed_size_type;
-
+    using value_type             = T;
+    using pointer                = value_type *;
+    using const_pointer          = value_type const *;
+    using reference              = value_type &;
+    using const_reference        = value_type const &;
+    using rv_reference           = value_type &&;
+    using size_type              = std::size_t;
+    using signed_size_type       = std::make_signed_t<size_type>;
+    using difference_type        = signed_size_type;
     using iterator               = pointer;
     using const_iterator         = const_pointer;
     using reverse_iterator       = pointer;
