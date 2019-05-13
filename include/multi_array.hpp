@@ -73,30 +73,56 @@ class Vector {
 
     using extents_type = std::tuple<std::intptr_t>;
 
-    [[nodiscard]] constexpr reference at ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] reference fat ( const std::intptr_t i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data - BaseI )[ i_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] value_type fat ( const std::intptr_t i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data - BaseI )[ i_ ];
+    }
+
+    [[nodiscard]] constexpr reference at ( const std::intptr_t i_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        return m_data[ ( -BaseI ) + i_ ];
+    }
+
+    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_ ) const noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        return m_data[ ( -BaseI ) + i_ ];
+    }
+
+    // Reverse at (rat).
+    [[nodiscard]] reference frat ( const std::intptr_t i_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        return ( m_data + I - 1 + BaseI )[ -i_ ];
+    }
+
+    // Reverse at (rat).
+    [[nodiscard]] value_type frat ( const std::intptr_t i_ ) const noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        return ( m_data + I - 1 + BaseI )[ -i_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr reference rat ( const std::intptr_t i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
-        return ( m_data + I - 1 + BaseI )[ -i_ ];
+        return m_data[ ( I - 1 + BaseI ) - i_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
-        return ( m_data + I - 1 + BaseI )[ -i_ ];
+        return m_data[ ( I - 1 + BaseI ) - i_ ];
     }
 
     [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
@@ -149,7 +175,15 @@ class Matrix {
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t>;
 
-    [[nodiscard]] constexpr const_reference ref ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] reference fat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        return ( m_data - BaseJ - BaseI * J )[ j_ + i_ * J ];
+    }
+
+    [[nodiscard]] value_type fat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -162,7 +196,7 @@ class Matrix {
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
         assert ( j_ < J + BaseJ );
-        return ( m_data - BaseJ - BaseI * J )[ j_ + i_ * J ];
+        return m_data[ ( -BaseJ - BaseI * J ) + j_ + i_ * J ];
     }
 
     [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
@@ -170,11 +204,20 @@ class Matrix {
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
         assert ( j_ < J + BaseJ );
-        return ( m_data - BaseJ - BaseI * J )[ j_ + i_ * J ];
+        return m_data[ ( -BaseJ - BaseI * J ) + j_ + i_ * J ];
     }
 
-    // Reverse ref (rref).
-    [[nodiscard]] constexpr const_reference rref ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    // Reverse at (rat).
+    [[nodiscard]] reference frat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        return ( m_data + I * J - 1 + BaseJ + BaseI * J )[ -j_ - i_ * J ];
+    }
+
+    // Reverse at (rat).
+    [[nodiscard]] value_type frat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -188,7 +231,7 @@ class Matrix {
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
         assert ( j_ < J + BaseJ );
-        return ( m_data + I * J - 1 + BaseJ + BaseI * J )[ -j_ - i_ * J ];
+        return m_data[ ( I * J - 1 + BaseJ + BaseI * J ) - j_ - i_ * J ];
     }
 
     // Reverse at (rat).
@@ -197,7 +240,7 @@ class Matrix {
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
         assert ( j_ < J + BaseJ );
-        return ( m_data + I * J - 1 + BaseJ + BaseI * J )[ -j_ - i_ * J ];
+        return m_data[ ( I * J - 1 + BaseJ + BaseI * J ) - j_ - i_ * J ];
     }
 
     [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
@@ -258,7 +301,7 @@ class Cube {
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t>;
 
-    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] reference fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -266,6 +309,26 @@ class Cube {
         assert ( k_ >= BaseK );
         assert ( k_ < K + BaseK );
         return ( m_data + K * ( -BaseJ - BaseI * J ) - BaseK )[ K * ( j_ + i_ * J ) + k_ ];
+    }
+
+    [[nodiscard]] value_type fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        assert ( k_ >= BaseK );
+        assert ( k_ < K + BaseK );
+        return ( m_data + K * ( -BaseJ - BaseI * J ) - BaseK )[ K * ( j_ + i_ * J ) + k_ ];
+    }
+
+    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        assert ( k_ >= BaseK );
+        assert ( k_ < K + BaseK );
+        return m_data[ ( K * ( -BaseJ - BaseI * J ) - BaseK ) + K * ( j_ + i_ * J ) + k_ ];
     }
 
     [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const
@@ -276,7 +339,29 @@ class Cube {
         assert ( j_ < J + BaseJ );
         assert ( k_ >= BaseK );
         assert ( k_ < K + BaseK );
-        return ( m_data + K * ( -BaseJ - BaseI * J ) - BaseK )[ K * ( j_ + i_ * J ) + k_ ];
+        return m_data[ ( K * ( -BaseJ - BaseI * J ) - BaseK ) + K * ( j_ + i_ * J ) + k_ ];
+    }
+
+    // Reverse at (rat).
+    [[nodiscard]] reference frat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        assert ( k_ >= BaseK );
+        assert ( k_ < K + BaseK );
+        return ( m_data + I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK )[ K * ( -j_ - i_ * J ) - k_ ];
+    }
+
+    // Reverse at (rat).
+    [[nodiscard]] value_type frat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        assert ( k_ >= BaseK );
+        assert ( k_ < K + BaseK );
+        return ( m_data + I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK )[ K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
@@ -287,7 +372,7 @@ class Cube {
         assert ( j_ < J + BaseJ );
         assert ( k_ >= BaseK );
         assert ( k_ < K + BaseK );
-        return ( m_data + I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK )[ K * ( -j_ - i_ * J ) - k_ ];
+        return m_data[ ( I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK ) + K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
@@ -299,7 +384,7 @@ class Cube {
         assert ( j_ < J + BaseJ );
         assert ( k_ >= BaseK );
         assert ( k_ < K + BaseK );
-        return ( m_data + I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK )[ K * ( -j_ - i_ * J ) - k_ ];
+        return m_data[ ( I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK ) + K * ( -j_ - i_ * J ) - k_ ];
     }
 
     [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
@@ -352,6 +437,32 @@ class HyperCube {
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t, std::intptr_t>;
 
+    [[nodiscard]] reference fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
+                                  const std::intptr_t l_ ) noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        assert ( k_ >= BaseK );
+        assert ( k_ < K + BaseK );
+        assert ( l_ >= BaseL );
+        assert ( l_ < L + BaseL );
+        return ( m_data + L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
+    }
+
+    [[nodiscard]] value_type fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
+                                   const std::intptr_t l_ ) const noexcept {
+        assert ( i_ >= BaseI );
+        assert ( i_ < I + BaseI );
+        assert ( j_ >= BaseJ );
+        assert ( j_ < J + BaseJ );
+        assert ( k_ >= BaseK );
+        assert ( k_ < K + BaseK );
+        assert ( l_ >= BaseL );
+        assert ( l_ < L + BaseL );
+        return ( m_data + L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
+    }
+
     [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
                                            const std::intptr_t l_ ) noexcept {
         assert ( i_ >= BaseI );
@@ -362,7 +473,7 @@ class HyperCube {
         assert ( k_ < K + BaseK );
         assert ( l_ >= BaseL );
         assert ( l_ < L + BaseL );
-        return ( m_data + L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
+        return m_data[ ( L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
     [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
@@ -375,7 +486,7 @@ class HyperCube {
         assert ( k_ < K + BaseK );
         assert ( l_ >= BaseL );
         assert ( l_ < L + BaseL );
-        return ( m_data + L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
+        return m_data[ ( L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
     [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }

@@ -40,17 +40,35 @@
 
 #include <multi_array.hpp>
 
+#include <plf/plf_nanotimer.h>
+#include <sax/prng.hpp>
+#include <sax/uniform_int_distribution.hpp>
+
 int main ( ) {
 
-    constexpr sax::Vector<int, 10, 5> v{ 1, 2, 3, 4, 5, 6, 7, 8 };
+    sax::Rng rng;
 
-    int i = v.at ( 8 );
+    sax::Matrix<int, 32, 32, -16, -16> v{};
 
-    std::cout << i << nl;
+    for ( auto & e : v ) {
+        e = std::uniform_int_distribution<int> ( -1000, +1000 ) ( rng );
+    }
 
-    for ( auto & e : v )
-        std::cout << e << ' ';
-    std::cout << nl;
+    plf::nanotimer timer;
+
+    std::uint64_t x = 0;
+
+    timer.start ( );
+
+    for ( int i = 0; i < 100'000'000; ++i ) {
+        x += v.at ( std::uniform_int_distribution<int> ( -16, +15 ) ( rng ),
+                    std::uniform_int_distribution<int> ( -16, +15 ) ( rng ) );
+    }
+
+    double t = timer.get_elapsed_ms ( );
+
+    std::cout << x << nl;
+    std::cout << t << nl;
 
     return EXIT_SUCCESS;
 }
