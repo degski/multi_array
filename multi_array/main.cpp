@@ -61,8 +61,8 @@ int main ( ) {
     timer.start ( );
 
     for ( int i = 0; i < 100'000'000; ++i ) {
-        x += v.at ( std::uniform_int_distribution<int> ( -16, +15 ) ( rng ),
-                    std::uniform_int_distribution<int> ( -16, +15 ) ( rng ) );
+        x += v.fat ( std::uniform_int_distribution<int> ( -16, +15 ) ( rng ),
+                     std::uniform_int_distribution<int> ( -16, +15 ) ( rng ) );
     }
 
     double t = timer.get_elapsed_ms ( );

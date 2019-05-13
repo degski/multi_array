@@ -36,6 +36,37 @@
 //  pointers [pointing outside the array m_data] in order to gain efficiency when dealing with
 //  off-zero indices (the fat() and frat() member functions).
 
+#define MA_COMMON_ELEMENTS                                                                                                         \
+    using value_type             = T;                                                                                              \
+    using pointer                = value_type *;                                                                                   \
+    using const_pointer          = value_type const *;                                                                             \
+    using reference              = value_type &;                                                                                   \
+    using const_reference        = value_type const &;                                                                             \
+    using rv_reference           = value_type &&;                                                                                  \
+    using size_type              = std::size_t;                                                                                    \
+    using signed_size_type       = std::make_signed_t<size_type>;                                                                  \
+    using difference_type        = signed_size_type;                                                                               \
+    using iterator               = pointer;                                                                                        \
+    using const_iterator         = const_pointer;                                                                                  \
+    using reverse_iterator       = pointer;                                                                                        \
+    using const_reverse_iterator = const_pointer;                                                                                  \
+                                                                                                                                   \
+    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }                                                           \
+    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }                                               \
+                                                                                                                                   \
+    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }                                          \
+    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }                             \
+    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }                            \
+    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }                                              \
+    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }                                 \
+    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }                                \
+    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }                                \
+    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }                   \
+    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }                  \
+    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }                                    \
+    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }                       \
+    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
+
 #define MA_ASSERT_1                                                                                                                \
     assert ( i_ >= BaseI );                                                                                                        \
     assert ( i_ < I + BaseI );
@@ -70,19 +101,13 @@ class Vector {
     [[nodiscard]] static constexpr int reverse_rebase ( ) noexcept { return I - 1 + BaseI; }
 
     public:
-    using value_type             = T;
-    using pointer                = value_type *;
-    using const_pointer          = value_type const *;
-    using reference              = value_type &;
-    using const_reference        = value_type const &;
-    using rv_reference           = value_type &&;
-    using size_type              = std::size_t;
-    using signed_size_type       = std::make_signed_t<size_type>;
-    using difference_type        = signed_size_type;
-    using iterator               = pointer;
-    using const_iterator         = const_pointer;
-    using reverse_iterator       = pointer;
-    using const_reverse_iterator = const_pointer;
+    using extents_type = std::tuple<int>;
+
+    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I }; }
+
+    MA_COMMON_ELEMENTS
 
     Vector ( ) noexcept : m_data{ T{} } {}
     Vector ( Vector const & v_ ) noexcept { std::memcpy ( m_data, v_.m_data, size ( ) * sizeof ( T ) ); }
@@ -102,8 +127,6 @@ class Vector {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
     [[nodiscard]] bool operator!= ( Vector const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
-
-    using extents_type = std::tuple<int>;
 
     [[nodiscard]] reference fat ( int const i_ ) noexcept {
         MA_ASSERT_1
@@ -148,26 +171,6 @@ class Vector {
         MA_ASSERT_1
         return m_data[ reverse_rebase ( ) - i_ ];
     }
-
-    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
-
-    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
-
-    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I; }
-    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I }; }
 };
 
 template<typename T, int I, int J, int BaseI = 0, int BaseJ = 0, typename = detail::is_valid_multi_array_type<T>>
@@ -179,19 +182,13 @@ class Matrix {
     [[nodiscard]] static constexpr int reverse_rebase ( ) noexcept { return I * J - 1 + BaseJ + BaseI * J; }
 
     public:
-    using value_type             = T;
-    using pointer                = value_type *;
-    using const_pointer          = value_type const *;
-    using reference              = value_type &;
-    using const_reference        = value_type const &;
-    using rv_reference           = value_type &&;
-    using size_type              = std::size_t;
-    using signed_size_type       = std::make_signed_t<size_type>;
-    using difference_type        = signed_size_type;
-    using iterator               = pointer;
-    using const_iterator         = const_pointer;
-    using reverse_iterator       = pointer;
-    using const_reverse_iterator = const_pointer;
+    using extents_type = std::tuple<int, int>;
+
+    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J }; }
+
+    MA_COMMON_ELEMENTS
 
     Matrix ( ) noexcept : m_data{ T{} } {}
     Matrix ( Matrix const & m_ ) noexcept { std::memcpy ( m_data, m_.m_data, size ( ) * sizeof ( T ) ); }
@@ -211,8 +208,6 @@ class Matrix {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
     [[nodiscard]] bool operator!= ( Matrix const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
-
-    using extents_type = std::tuple<int, int>;
 
     [[nodiscard]] reference fat ( int const i_, int const j_ ) noexcept {
         MA_ASSERT_2
@@ -257,26 +252,6 @@ class Matrix {
         MA_ASSERT_2
         return m_data[ reverse_rebase ( ) - j_ - i_ * J ];
     }
-
-    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
-
-    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
-
-    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J; }
-    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J }; }
 };
 
 template<typename T, int I, int J, int BaseI = 0, int BaseJ = 0,
@@ -297,19 +272,13 @@ class Cube {
     [[nodiscard]] static constexpr int reverse_rebase ( ) noexcept { return I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK; }
 
     public:
-    using value_type             = T;
-    using pointer                = value_type *;
-    using const_pointer          = value_type const *;
-    using reference              = value_type &;
-    using const_reference        = value_type const &;
-    using rv_reference           = value_type &&;
-    using size_type              = std::size_t;
-    using signed_size_type       = std::make_signed_t<size_type>;
-    using difference_type        = signed_size_type;
-    using iterator               = pointer;
-    using const_iterator         = const_pointer;
-    using reverse_iterator       = pointer;
-    using const_reverse_iterator = const_pointer;
+    using extents_type = std::tuple<int, int, int>;
+
+    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K }; }
+
+    MA_COMMON_ELEMENTS
 
     Cube ( ) noexcept : m_data{ T{} } {}
     Cube ( Cube const & c_ ) noexcept { std::memcpy ( m_data, c_.m_data, size ( ) * sizeof ( T ) ); }
@@ -329,8 +298,6 @@ class Cube {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
     [[nodiscard]] bool operator!= ( Cube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
-
-    using extents_type = std::tuple<int, int, int>;
 
     [[nodiscard]] reference fat ( int const i_, int const j_, int const k_ ) noexcept {
         MA_ASSERT_3
@@ -375,26 +342,6 @@ class Cube {
         MA_ASSERT_3
         return m_data[ reverse_rebase ( ) + K * ( -j_ - i_ * J ) - k_ ];
     }
-
-    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
-
-    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
-
-    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K; }
-    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K }; }
 };
 
 template<typename T, int I, int J, int K, int L, int BaseI = 0, int BaseJ = 0, int BaseK = 0, int BaseL = 0,
@@ -406,19 +353,13 @@ class HyperCube {
     [[nodiscard]] static constexpr int rebase ( ) noexcept { return L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL; }
 
     public:
-    using value_type             = T;
-    using pointer                = value_type *;
-    using const_pointer          = value_type const *;
-    using reference              = value_type &;
-    using const_reference        = value_type const &;
-    using rv_reference           = value_type &&;
-    using size_type              = std::size_t;
-    using signed_size_type       = std::make_signed_t<size_type>;
-    using difference_type        = signed_size_type;
-    using iterator               = pointer;
-    using const_iterator         = const_pointer;
-    using reverse_iterator       = pointer;
-    using const_reverse_iterator = const_pointer;
+    using extents_type = std::tuple<int, int, int, int>;
+
+    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K * L; }
+    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K * L; }
+    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K, L }; }
+
+    MA_COMMON_ELEMENTS
 
     HyperCube ( ) noexcept : m_data{ T{} } {}
     HyperCube ( HyperCube const & h_ ) noexcept { std::memcpy ( m_data, h_.m_data, size ( ) * sizeof ( T ) ); }
@@ -439,8 +380,6 @@ class HyperCube {
     }
     [[nodiscard]] bool operator!= ( HyperCube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
-    using extents_type = std::tuple<int, int, int, int>;
-
     [[nodiscard]] reference fat ( int const i_, int const j_, int const k_, int const l_ ) noexcept {
         MA_ASSERT_4
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
@@ -460,26 +399,6 @@ class HyperCube {
         MA_ASSERT_4
         return m_data[ rebase ( ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
-
-    [[nodiscard]] constexpr pointer data ( ) noexcept { return m_data; }
-    [[nodiscard]] constexpr const_pointer data ( ) const noexcept { return m_data; }
-
-    [[nodiscard]] constexpr iterator begin ( ) noexcept { return std::begin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator begin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cbegin ( ) const noexcept { return std::cbegin ( m_data ); }
-    [[nodiscard]] constexpr iterator end ( ) noexcept { return std::end ( m_data ); }
-    [[nodiscard]] constexpr const_iterator end ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr const_iterator cend ( ) const noexcept { return std::cend ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rbegin ( ) noexcept { return std::rbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crbegin ( ) const noexcept { return std::crbegin ( m_data ); }
-    [[nodiscard]] constexpr reverse_iterator rend ( ) noexcept { return std::rend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator rend ( ) const noexcept { return std::crend ( m_data ); }
-    [[nodiscard]] constexpr const_reverse_iterator crend ( ) const noexcept { return std::crend ( m_data ); }
-
-    [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K * L; }
-    [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K * L; }
-    [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K, L }; }
 };
 
 } // namespace sax
