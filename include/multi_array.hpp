@@ -69,10 +69,23 @@ class Vector {
     using const_reverse_iterator = const_pointer;
 
     Vector ( ) noexcept : m_data{ T{} } {}
-    Vector ( const Vector & v_ ) noexcept { std::memcpy ( m_data, v_.m_data, I * sizeof ( T ) ); }
-    Vector ( Vector && v_ ) noexcept { std::memcpy ( m_data, v_.m_data, I * sizeof ( T ) ); }
+    Vector ( const Vector & v_ ) noexcept { std::memcpy ( m_data, v_.m_data, size ( ) * sizeof ( T ) ); }
+    Vector ( Vector && v_ ) noexcept = delete;
     template<typename... Args>
     constexpr Vector ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+
+    ~Vector ( ) = default;
+
+    Vector & operator= ( const Vector & rhs_ ) noexcept {
+        std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
+        return *this;
+    }
+    Vector & operator= ( Vector && rhs_ ) noexcept = delete;
+
+    [[nodiscard]] bool operator== ( const Vector & rhs_ ) noexcept {
+        return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
+    }
+    [[nodiscard]] bool operator!= ( const Vector & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t>;
 
@@ -174,10 +187,23 @@ class Matrix {
     using const_reverse_iterator = const_pointer;
 
     Matrix ( ) noexcept : m_data{ T{} } {}
-    Matrix ( const Matrix & m_ ) noexcept { std::memcpy ( m_data, m_.m_data, I * J * sizeof ( T ) ); }
-    Matrix ( Matrix && m_ ) noexcept { std::memcpy ( m_data, m_.m_data, I * J * sizeof ( T ) ); }
+    Matrix ( const Matrix & m_ ) noexcept { std::memcpy ( m_data, m_.m_data, size ( ) * sizeof ( T ) ); }
+    Matrix ( Matrix && m_ ) noexcept = delete;
     template<typename... Args>
     constexpr Matrix ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+
+    ~Matrix ( ) = default;
+
+    Matrix & operator= ( const Matrix & rhs_ ) noexcept {
+        std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
+        return *this;
+    }
+    Matrix & operator= ( Matrix && rhs_ ) noexcept = delete;
+
+    [[nodiscard]] bool operator== ( const Matrix & rhs_ ) noexcept {
+        return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
+    }
+    [[nodiscard]] bool operator!= ( const Matrix & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t>;
 
@@ -305,10 +331,23 @@ class Cube {
     using const_reverse_iterator = const_pointer;
 
     Cube ( ) noexcept : m_data{ T{} } {}
-    Cube ( const Cube & c_ ) noexcept { std::memcpy ( m_data, c_.m_data, I * J * K * sizeof ( T ) ); }
-    Cube ( Cube && c_ ) noexcept { std::memcpy ( m_data, c_.m_data, I * J * K * sizeof ( T ) ); }
+    Cube ( const Cube & c_ ) noexcept { std::memcpy ( m_data, c_.m_data, size ( ) * sizeof ( T ) ); }
+    Cube ( Cube && c_ ) noexcept = delete;
     template<typename... Args>
     constexpr Cube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+
+    ~Cube ( ) = default;
+
+    Cube & operator= ( const Cube & rhs_ ) noexcept {
+        std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
+        return *this;
+    }
+    Cube & operator= ( Cube && rhs_ ) noexcept = delete;
+
+    [[nodiscard]] bool operator== ( const Cube & rhs_ ) noexcept {
+        return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
+    }
+    [[nodiscard]] bool operator!= ( const Cube & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t>;
 
@@ -443,10 +482,23 @@ class HyperCube {
     using const_reverse_iterator = const_pointer;
 
     HyperCube ( ) noexcept : m_data{ T{} } {}
-    HyperCube ( const HyperCube & h_ ) noexcept { std::memcpy ( m_data, h_.m_data, I * J * K * L * sizeof ( T ) ); }
-    HyperCube ( HyperCube && h_ ) noexcept { std::memcpy ( m_data, h_.m_data, I * J * K * L * sizeof ( T ) ); }
+    HyperCube ( const HyperCube & h_ ) noexcept { std::memcpy ( m_data, h_.m_data, size ( ) * sizeof ( T ) ); }
+    HyperCube ( HyperCube && h_ ) noexcept = delete;
     template<typename... Args>
     constexpr HyperCube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
+
+    ~HyperCube ( ) = default;
+
+    HyperCube & operator= ( const HyperCube & rhs_ ) noexcept {
+        std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
+        return *this;
+    }
+    HyperCube & operator= ( HyperCube && rhs_ ) noexcept = delete;
+
+    [[nodiscard]] bool operator== ( const HyperCube & rhs_ ) noexcept {
+        return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
+    }
+    [[nodiscard]] bool operator!= ( const HyperCube & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t, std::intptr_t>;
 
@@ -521,6 +573,5 @@ class HyperCube {
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K * L; }
     [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K * L; }
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K, L }; }
-};
-
+}; // namespace sax
 }; // namespace sax
