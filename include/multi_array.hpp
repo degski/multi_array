@@ -36,19 +36,19 @@
 //  pointers [pointing outside the array m_data] in order to gain efficiency when dealing with
 //  off-zero indices (the fat() and frat() member functions).
 
-#define ASSERT1                                                                                                                    \
+#define MA_ASSERT_1                                                                                                                \
     assert ( i_ >= BaseI );                                                                                                        \
     assert ( i_ < I + BaseI );
-#define ASSERT2                                                                                                                    \
-    ASSERT1                                                                                                                        \
+#define MA_ASSERT_2                                                                                                                \
+    MA_ASSERT_1                                                                                                                    \
     assert ( j_ >= BaseJ );                                                                                                        \
     assert ( j_ < J + BaseJ );
-#define ASSERT3                                                                                                                    \
-    ASSERT2                                                                                                                        \
+#define MA_ASSERT_3                                                                                                                \
+    MA_ASSERT_2                                                                                                                    \
     assert ( k_ >= BaseK );                                                                                                        \
     assert ( k_ < K + BaseK );
-#define ASSERT4                                                                                                                    \
-    ASSERT3                                                                                                                        \
+#define MA_ASSERT_4                                                                                                                \
+    MA_ASSERT_3                                                                                                                    \
     assert ( l_ >= BaseL );                                                                                                        \
     assert ( l_ < L + BaseL );
 
@@ -106,46 +106,46 @@ class Vector {
     using extents_type = std::tuple<std::intptr_t>;
 
     [[nodiscard]] reference fat ( std::intptr_t const i_ ) noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return ( m_data + rebase ( ) )[ i_ ];
     }
 
     [[nodiscard]] value_type fat ( std::intptr_t const i_ ) const noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return ( m_data + rebase ( ) )[ i_ ];
     }
 
     [[nodiscard]] constexpr reference at ( std::intptr_t const i_ ) noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return m_data[ rebase ( ) + i_ ];
     }
 
     [[nodiscard]] constexpr value_type at ( std::intptr_t const i_ ) const noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return m_data[ rebase ( ) + i_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] reference frat ( std::intptr_t const i_ ) noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return ( m_data + reverse_rebase ( ) )[ -i_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] value_type frat ( std::intptr_t const i_ ) const noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return ( m_data + reverse_rebase ( ) )[ -i_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr reference rat ( std::intptr_t const i_ ) noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return m_data[ reverse_rebase ( ) - i_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_ ) const noexcept {
-        ASSERT1
+        MA_ASSERT_1
         return m_data[ reverse_rebase ( ) - i_ ];
     }
 
@@ -216,46 +216,46 @@ class Matrix {
     using extents_type = std::tuple<std::intptr_t, std::intptr_t>;
 
     [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
     }
 
     [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
     }
 
     [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return m_data[ rebase ( ) + j_ + i_ * J ];
     }
 
     [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return m_data[ rebase ( ) + j_ + i_ * J ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] reference frat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return ( m_data + reverse_rebase ( ) )[ -j_ - i_ * J ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] value_type frat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return ( m_data + reverse_rebase ( ) )[ -j_ - i_ * J ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr reference rat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return m_data[ reverse_rebase ( ) - j_ - i_ * J ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
-        ASSERT2
+        MA_ASSERT_2
         return m_data[ reverse_rebase ( ) - j_ - i_ * J ];
     }
 
@@ -336,48 +336,48 @@ class Cube {
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t>;
 
     [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return ( m_data + rebase ( ) )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
     [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return ( m_data + rebase ( ) )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
     [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return m_data[ rebase ( ) + K * ( j_ + i_ * J ) + k_ ];
     }
 
     [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const
         noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return m_data[ rebase ( ) + K * ( j_ + i_ * J ) + k_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] reference frat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return ( m_data + reverse_rebase ( ) )[ K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] value_type frat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return ( m_data + reverse_rebase ( ) )[ K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr reference rat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return m_data[ reverse_rebase ( ) + K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
     [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const
         noexcept {
-        ASSERT3
+        MA_ASSERT_3
         return m_data[ reverse_rebase ( ) + K * ( -j_ - i_ * J ) - k_ ];
     }
 
@@ -448,25 +448,25 @@ class HyperCube {
 
     [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
                                   std::intptr_t const l_ ) noexcept {
-        ASSERT4
+        MA_ASSERT_4
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
     [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
                                    std::intptr_t const l_ ) const noexcept {
-        ASSERT4
+        MA_ASSERT_4
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
     [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
                                            std::intptr_t const l_ ) noexcept {
-        ASSERT4
+        MA_ASSERT_4
         return m_data[ rebase ( ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
     [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
                                             std::intptr_t const l_ ) const noexcept {
-        ASSERT4
+        MA_ASSERT_4
         return m_data[ rebase ( ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
@@ -493,7 +493,7 @@ class HyperCube {
 
 } // namespace sax
 
-#undef ASSERT4
-#undef ASSERT3
-#undef ASSERT2
-#undef ASSERT1
+#undef MA_ASSERT_4
+#undef MA_ASSERT_3
+#undef MA_ASSERT_2
+#undef MA_ASSERT_1
