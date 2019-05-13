@@ -34,7 +34,7 @@
 
 // This library invokes Undefined Behaviour (UB), as it exploits the pre-calculation of intermediate
 //  pointers [pointing outside the array m_data] in order to gain efficiency when dealing with
-//  off-zero indices.
+//  off-zero indices (the fat() and frat() member functions).
 
 namespace sax {
 
@@ -573,5 +573,6 @@ class HyperCube {
     [[nodiscard]] static constexpr std::size_t size ( ) noexcept { return I * J * K * L; }
     [[nodiscard]] static constexpr std::size_t capacity ( ) noexcept { return I * J * K * L; }
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K, L }; }
-}; // namespace sax
-}; // namespace sax
+};
+
+} // namespace sax
