@@ -407,3 +407,4 @@ class HyperCube {
 #undef MA_ASSERT_3
 #undef MA_ASSERT_2
 #undef MA_ASSERT_1
+#undef MA_COMMON_ELEMENTS
