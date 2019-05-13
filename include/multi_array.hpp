@@ -69,73 +69,73 @@ class Vector {
     using const_reverse_iterator = const_pointer;
 
     Vector ( ) noexcept : m_data{ T{} } {}
-    Vector ( const Vector & v_ ) noexcept { std::memcpy ( m_data, v_.m_data, size ( ) * sizeof ( T ) ); }
+    Vector ( Vector const & v_ ) noexcept { std::memcpy ( m_data, v_.m_data, size ( ) * sizeof ( T ) ); }
     Vector ( Vector && v_ ) noexcept = delete;
     template<typename... Args>
     constexpr Vector ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
     ~Vector ( ) = default;
 
-    Vector & operator= ( const Vector & rhs_ ) noexcept {
+    Vector & operator= ( Vector const & rhs_ ) noexcept {
         std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
         return *this;
     }
     Vector & operator= ( Vector && rhs_ ) noexcept = delete;
 
-    [[nodiscard]] bool operator== ( const Vector & rhs_ ) noexcept {
+    [[nodiscard]] bool operator== ( Vector const & rhs_ ) noexcept {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
-    [[nodiscard]] bool operator!= ( const Vector & rhs_ ) noexcept { return not operator== ( rhs_ ); };
+    [[nodiscard]] bool operator!= ( Vector const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t>;
 
-    [[nodiscard]] reference fat ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] reference fat ( std::intptr_t const i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data + rebase ( ) )[ i_ ];
     }
 
-    [[nodiscard]] value_type fat ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] value_type fat ( std::intptr_t const i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data + rebase ( ) )[ i_ ];
     }
 
-    [[nodiscard]] constexpr reference at ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( std::intptr_t const i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return m_data[ rebase ( ) + i_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return m_data[ rebase ( ) + i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference frat ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] reference frat ( std::intptr_t const i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data + reverse_rebase ( ) )[ -i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type frat ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] value_type frat ( std::intptr_t const i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return ( m_data + reverse_rebase ( ) )[ -i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr reference rat ( const std::intptr_t i_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( std::intptr_t const i_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return m_data[ reverse_rebase ( ) - i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         return m_data[ reverse_rebase ( ) - i_ ];
@@ -187,27 +187,27 @@ class Matrix {
     using const_reverse_iterator = const_pointer;
 
     Matrix ( ) noexcept : m_data{ T{} } {}
-    Matrix ( const Matrix & m_ ) noexcept { std::memcpy ( m_data, m_.m_data, size ( ) * sizeof ( T ) ); }
+    Matrix ( Matrix const & m_ ) noexcept { std::memcpy ( m_data, m_.m_data, size ( ) * sizeof ( T ) ); }
     Matrix ( Matrix && m_ ) noexcept = delete;
     template<typename... Args>
     constexpr Matrix ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
     ~Matrix ( ) = default;
 
-    Matrix & operator= ( const Matrix & rhs_ ) noexcept {
+    Matrix & operator= ( Matrix const & rhs_ ) noexcept {
         std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
         return *this;
     }
     Matrix & operator= ( Matrix && rhs_ ) noexcept = delete;
 
-    [[nodiscard]] bool operator== ( const Matrix & rhs_ ) noexcept {
+    [[nodiscard]] bool operator== ( Matrix const & rhs_ ) noexcept {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
-    [[nodiscard]] bool operator!= ( const Matrix & rhs_ ) noexcept { return not operator== ( rhs_ ); };
+    [[nodiscard]] bool operator!= ( Matrix const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t>;
 
-    [[nodiscard]] reference fat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -215,7 +215,7 @@ class Matrix {
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
     }
 
-    [[nodiscard]] value_type fat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -223,7 +223,7 @@ class Matrix {
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
     }
 
-    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -231,7 +231,7 @@ class Matrix {
         return m_data[ rebase ( ) + j_ + i_ * J ];
     }
 
-    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -240,7 +240,7 @@ class Matrix {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference frat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] reference frat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -249,7 +249,7 @@ class Matrix {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type frat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] value_type frat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -258,7 +258,7 @@ class Matrix {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr reference rat ( const std::intptr_t i_, const std::intptr_t j_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -267,7 +267,7 @@ class Matrix {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_, const std::intptr_t j_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -331,27 +331,27 @@ class Cube {
     using const_reverse_iterator = const_pointer;
 
     Cube ( ) noexcept : m_data{ T{} } {}
-    Cube ( const Cube & c_ ) noexcept { std::memcpy ( m_data, c_.m_data, size ( ) * sizeof ( T ) ); }
+    Cube ( Cube const & c_ ) noexcept { std::memcpy ( m_data, c_.m_data, size ( ) * sizeof ( T ) ); }
     Cube ( Cube && c_ ) noexcept = delete;
     template<typename... Args>
     constexpr Cube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
     ~Cube ( ) = default;
 
-    Cube & operator= ( const Cube & rhs_ ) noexcept {
+    Cube & operator= ( Cube const & rhs_ ) noexcept {
         std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
         return *this;
     }
     Cube & operator= ( Cube && rhs_ ) noexcept = delete;
 
-    [[nodiscard]] bool operator== ( const Cube & rhs_ ) noexcept {
+    [[nodiscard]] bool operator== ( Cube const & rhs_ ) noexcept {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
-    [[nodiscard]] bool operator!= ( const Cube & rhs_ ) noexcept { return not operator== ( rhs_ ); };
+    [[nodiscard]] bool operator!= ( Cube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t>;
 
-    [[nodiscard]] reference fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -361,7 +361,7 @@ class Cube {
         return ( m_data + rebase ( ) )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] value_type fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const noexcept {
+    [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -371,7 +371,7 @@ class Cube {
         return ( m_data + rebase ( ) )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -381,7 +381,7 @@ class Cube {
         return m_data[ rebase ( ) + K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const
+    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const
         noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
@@ -393,7 +393,7 @@ class Cube {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference frat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] reference frat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -404,7 +404,7 @@ class Cube {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type frat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const noexcept {
+    [[nodiscard]] value_type frat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -415,7 +415,7 @@ class Cube {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr reference rat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -426,7 +426,7 @@ class Cube {
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr value_type rat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_ ) const
+    [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const
         noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
@@ -482,28 +482,28 @@ class HyperCube {
     using const_reverse_iterator = const_pointer;
 
     HyperCube ( ) noexcept : m_data{ T{} } {}
-    HyperCube ( const HyperCube & h_ ) noexcept { std::memcpy ( m_data, h_.m_data, size ( ) * sizeof ( T ) ); }
+    HyperCube ( HyperCube const & h_ ) noexcept { std::memcpy ( m_data, h_.m_data, size ( ) * sizeof ( T ) ); }
     HyperCube ( HyperCube && h_ ) noexcept = delete;
     template<typename... Args>
     constexpr HyperCube ( Args... a_ ) noexcept : m_data{ std::forward<Args> ( a_ )... } {}
 
     ~HyperCube ( ) = default;
 
-    HyperCube & operator= ( const HyperCube & rhs_ ) noexcept {
+    HyperCube & operator= ( HyperCube const & rhs_ ) noexcept {
         std::memcpy ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) );
         return *this;
     }
     HyperCube & operator= ( HyperCube && rhs_ ) noexcept = delete;
 
-    [[nodiscard]] bool operator== ( const HyperCube & rhs_ ) noexcept {
+    [[nodiscard]] bool operator== ( HyperCube const & rhs_ ) noexcept {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
-    [[nodiscard]] bool operator!= ( const HyperCube & rhs_ ) noexcept { return not operator== ( rhs_ ); };
+    [[nodiscard]] bool operator!= ( HyperCube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
     using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t, std::intptr_t>;
 
-    [[nodiscard]] reference fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
-                                  const std::intptr_t l_ ) noexcept {
+    [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
+                                  std::intptr_t const l_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -515,8 +515,8 @@ class HyperCube {
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] value_type fat ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
-                                   const std::intptr_t l_ ) const noexcept {
+    [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
+                                   std::intptr_t const l_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -528,8 +528,8 @@ class HyperCube {
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] constexpr reference at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
-                                           const std::intptr_t l_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
+                                           std::intptr_t const l_ ) noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
@@ -541,8 +541,8 @@ class HyperCube {
         return m_data[ rebase ( ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( const std::intptr_t i_, const std::intptr_t j_, const std::intptr_t k_,
-                                            const std::intptr_t l_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
+                                            std::intptr_t const l_ ) const noexcept {
         assert ( i_ >= BaseI );
         assert ( i_ < I + BaseI );
         assert ( j_ >= BaseJ );
