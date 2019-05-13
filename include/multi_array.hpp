@@ -25,7 +25,7 @@
 
 #include <cassert> // assert
 #include <cstddef> // std::size_t
-#include <cstdint> // std::intptr_t
+#include <cstdint> // int
 #include <cstring> // std::memcpy
 
 #include <tuple>
@@ -61,13 +61,13 @@ using is_valid_multi_array_type =
     std::enable_if_t<std::conjunction<std::is_default_constructible<T>, std::is_trivially_copyable<T>>::value, T>;
 }
 
-template<typename T, std::intptr_t I, std::intptr_t BaseI = 0, typename = detail::is_valid_multi_array_type<T>>
+template<typename T, int I, int BaseI = 0, typename = detail::is_valid_multi_array_type<T>>
 class Vector {
 
     T m_data[ I ];
 
-    [[nodiscard]] static constexpr std::intptr_t rebase ( ) noexcept { return -BaseI; }
-    [[nodiscard]] static constexpr std::intptr_t reverse_rebase ( ) noexcept { return I - 1 + BaseI; }
+    [[nodiscard]] static constexpr int rebase ( ) noexcept { return -BaseI; }
+    [[nodiscard]] static constexpr int reverse_rebase ( ) noexcept { return I - 1 + BaseI; }
 
     public:
     using value_type             = T;
@@ -103,48 +103,48 @@ class Vector {
     }
     [[nodiscard]] bool operator!= ( Vector const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
-    using extents_type = std::tuple<std::intptr_t>;
+    using extents_type = std::tuple<int>;
 
-    [[nodiscard]] reference fat ( std::intptr_t const i_ ) noexcept {
+    [[nodiscard]] reference fat ( int const i_ ) noexcept {
         MA_ASSERT_1
         return ( m_data + rebase ( ) )[ i_ ];
     }
 
-    [[nodiscard]] value_type fat ( std::intptr_t const i_ ) const noexcept {
+    [[nodiscard]] value_type fat ( int const i_ ) const noexcept {
         MA_ASSERT_1
         return ( m_data + rebase ( ) )[ i_ ];
     }
 
-    [[nodiscard]] constexpr reference at ( std::intptr_t const i_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( int const i_ ) noexcept {
         MA_ASSERT_1
         return m_data[ rebase ( ) + i_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( int const i_ ) const noexcept {
         MA_ASSERT_1
         return m_data[ rebase ( ) + i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference frat ( std::intptr_t const i_ ) noexcept {
+    [[nodiscard]] reference frat ( int const i_ ) noexcept {
         MA_ASSERT_1
         return ( m_data + reverse_rebase ( ) )[ -i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type frat ( std::intptr_t const i_ ) const noexcept {
+    [[nodiscard]] value_type frat ( int const i_ ) const noexcept {
         MA_ASSERT_1
         return ( m_data + reverse_rebase ( ) )[ -i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr reference rat ( std::intptr_t const i_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( int const i_ ) noexcept {
         MA_ASSERT_1
         return m_data[ reverse_rebase ( ) - i_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( int const i_ ) const noexcept {
         MA_ASSERT_1
         return m_data[ reverse_rebase ( ) - i_ ];
     }
@@ -170,14 +170,13 @@ class Vector {
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I }; }
 };
 
-template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
-         typename = detail::is_valid_multi_array_type<T>>
+template<typename T, int I, int J, int BaseI = 0, int BaseJ = 0, typename = detail::is_valid_multi_array_type<T>>
 class Matrix {
 
     T m_data[ I * J ];
 
-    [[nodiscard]] static constexpr std::intptr_t rebase ( ) noexcept { return -BaseJ - BaseI * J; }
-    [[nodiscard]] static constexpr std::intptr_t reverse_rebase ( ) noexcept { return I * J - 1 + BaseJ + BaseI * J; }
+    [[nodiscard]] static constexpr int rebase ( ) noexcept { return -BaseJ - BaseI * J; }
+    [[nodiscard]] static constexpr int reverse_rebase ( ) noexcept { return I * J - 1 + BaseJ + BaseI * J; }
 
     public:
     using value_type             = T;
@@ -213,48 +212,48 @@ class Matrix {
     }
     [[nodiscard]] bool operator!= ( Matrix const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
-    using extents_type = std::tuple<std::intptr_t, std::intptr_t>;
+    using extents_type = std::tuple<int, int>;
 
-    [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
+    [[nodiscard]] reference fat ( int const i_, int const j_ ) noexcept {
         MA_ASSERT_2
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
     }
 
-    [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
+    [[nodiscard]] value_type fat ( int const i_, int const j_ ) const noexcept {
         MA_ASSERT_2
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
     }
 
-    [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( int const i_, int const j_ ) noexcept {
         MA_ASSERT_2
         return m_data[ rebase ( ) + j_ + i_ * J ];
     }
 
-    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( int const i_, int const j_ ) const noexcept {
         MA_ASSERT_2
         return m_data[ rebase ( ) + j_ + i_ * J ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference frat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
+    [[nodiscard]] reference frat ( int const i_, int const j_ ) noexcept {
         MA_ASSERT_2
         return ( m_data + reverse_rebase ( ) )[ -j_ - i_ * J ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type frat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
+    [[nodiscard]] value_type frat ( int const i_, int const j_ ) const noexcept {
         MA_ASSERT_2
         return ( m_data + reverse_rebase ( ) )[ -j_ - i_ * J ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr reference rat ( std::intptr_t const i_, std::intptr_t const j_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( int const i_, int const j_ ) noexcept {
         MA_ASSERT_2
         return m_data[ reverse_rebase ( ) - j_ - i_ * J ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_, std::intptr_t const j_ ) const noexcept {
+    [[nodiscard]] constexpr value_type rat ( int const i_, int const j_ ) const noexcept {
         MA_ASSERT_2
         return m_data[ reverse_rebase ( ) - j_ - i_ * J ];
     }
@@ -280,24 +279,22 @@ class Matrix {
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J }; }
 };
 
-template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
+template<typename T, int I, int J, int BaseI = 0, int BaseJ = 0,
          typename = std::enable_if_t<std::is_default_constructible<T>::value, T>>
 using MatrixRM = Matrix<T, I, J, BaseI, BaseJ>;
 
-template<typename T, std::intptr_t J, std::intptr_t I, std::intptr_t BaseJ = 0, std::intptr_t BaseI = 0,
+template<typename T, int J, int I, int BaseJ = 0, int BaseI = 0,
          typename = std::enable_if_t<std::is_default_constructible<T>::value, T>>
 using MatrixCM = Matrix<T, J, I, BaseJ, BaseI>;
 
-template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t K, std::intptr_t BaseI = 0, std::intptr_t BaseJ = 0,
-         std::intptr_t BaseK = 0, typename = detail::is_valid_multi_array_type<T>>
+template<typename T, int I, int J, int K, int BaseI = 0, int BaseJ = 0, int BaseK = 0,
+         typename = detail::is_valid_multi_array_type<T>>
 class Cube {
 
     T m_data[ I * J * K ];
 
-    [[nodiscard]] static constexpr std::intptr_t rebase ( ) noexcept { return K * ( -BaseJ - BaseI * J ) - BaseK; }
-    [[nodiscard]] static constexpr std::intptr_t reverse_rebase ( ) noexcept {
-        return I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK;
-    }
+    [[nodiscard]] static constexpr int rebase ( ) noexcept { return K * ( -BaseJ - BaseI * J ) - BaseK; }
+    [[nodiscard]] static constexpr int reverse_rebase ( ) noexcept { return I * J * K - 1 + BaseJ * K + BaseI * J * K + BaseK; }
 
     public:
     using value_type             = T;
@@ -333,50 +330,48 @@ class Cube {
     }
     [[nodiscard]] bool operator!= ( Cube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
-    using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t>;
+    using extents_type = std::tuple<int, int, int>;
 
-    [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
+    [[nodiscard]] reference fat ( int const i_, int const j_, int const k_ ) noexcept {
         MA_ASSERT_3
         return ( m_data + rebase ( ) )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const noexcept {
+    [[nodiscard]] value_type fat ( int const i_, int const j_, int const k_ ) const noexcept {
         MA_ASSERT_3
         return ( m_data + rebase ( ) )[ K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( int const i_, int const j_, int const k_ ) noexcept {
         MA_ASSERT_3
         return m_data[ rebase ( ) + K * ( j_ + i_ * J ) + k_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const
-        noexcept {
+    [[nodiscard]] constexpr value_type at ( int const i_, int const j_, int const k_ ) const noexcept {
         MA_ASSERT_3
         return m_data[ rebase ( ) + K * ( j_ + i_ * J ) + k_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] reference frat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
+    [[nodiscard]] reference frat ( int const i_, int const j_, int const k_ ) noexcept {
         MA_ASSERT_3
         return ( m_data + reverse_rebase ( ) )[ K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] value_type frat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const noexcept {
+    [[nodiscard]] value_type frat ( int const i_, int const j_, int const k_ ) const noexcept {
         MA_ASSERT_3
         return ( m_data + reverse_rebase ( ) )[ K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr reference rat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) noexcept {
+    [[nodiscard]] constexpr reference rat ( int const i_, int const j_, int const k_ ) noexcept {
         MA_ASSERT_3
         return m_data[ reverse_rebase ( ) + K * ( -j_ - i_ * J ) - k_ ];
     }
 
     // Reverse at (rat).
-    [[nodiscard]] constexpr value_type rat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_ ) const
-        noexcept {
+    [[nodiscard]] constexpr value_type rat ( int const i_, int const j_, int const k_ ) const noexcept {
         MA_ASSERT_3
         return m_data[ reverse_rebase ( ) + K * ( -j_ - i_ * J ) - k_ ];
     }
@@ -402,13 +397,13 @@ class Cube {
     [[nodiscard]] static constexpr extents_type extents ( ) noexcept { return { I, J, K }; }
 };
 
-template<typename T, std::intptr_t I, std::intptr_t J, std::intptr_t K, std::intptr_t L, std::intptr_t BaseI = 0,
-         std::intptr_t BaseJ = 0, std::intptr_t BaseK = 0, std::intptr_t BaseL = 0, typename = detail::is_valid_multi_array_type<T>>
+template<typename T, int I, int J, int K, int L, int BaseI = 0, int BaseJ = 0, int BaseK = 0, int BaseL = 0,
+         typename = detail::is_valid_multi_array_type<T>>
 class HyperCube {
 
     T m_data[ I * J * K * L ];
 
-    [[nodiscard]] static constexpr std::intptr_t rebase ( ) noexcept { return L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL; }
+    [[nodiscard]] static constexpr int rebase ( ) noexcept { return L * ( K * ( -BaseJ - BaseI * J ) - BaseK ) - BaseL; }
 
     public:
     using value_type             = T;
@@ -444,28 +439,24 @@ class HyperCube {
     }
     [[nodiscard]] bool operator!= ( HyperCube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
-    using extents_type = std::tuple<std::intptr_t, std::intptr_t, std::intptr_t, std::intptr_t>;
+    using extents_type = std::tuple<int, int, int, int>;
 
-    [[nodiscard]] reference fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
-                                  std::intptr_t const l_ ) noexcept {
+    [[nodiscard]] reference fat ( int const i_, int const j_, int const k_, int const l_ ) noexcept {
         MA_ASSERT_4
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] value_type fat ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
-                                   std::intptr_t const l_ ) const noexcept {
+    [[nodiscard]] value_type fat ( int const i_, int const j_, int const k_, int const l_ ) const noexcept {
         MA_ASSERT_4
         return ( m_data + rebase ( ) )[ L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] constexpr reference at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
-                                           std::intptr_t const l_ ) noexcept {
+    [[nodiscard]] constexpr reference at ( int const i_, int const j_, int const k_, int const l_ ) noexcept {
         MA_ASSERT_4
         return m_data[ rebase ( ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
 
-    [[nodiscard]] constexpr value_type at ( std::intptr_t const i_, std::intptr_t const j_, std::intptr_t const k_,
-                                            std::intptr_t const l_ ) const noexcept {
+    [[nodiscard]] constexpr value_type at ( int const i_, int const j_, int const k_, int const l_ ) const noexcept {
         MA_ASSERT_4
         return m_data[ rebase ( ) + L * ( K * ( j_ + i_ * J ) + k_ ) + l_ ];
     }
