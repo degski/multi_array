@@ -54,6 +54,20 @@ int main ( ) {
         e = std::uniform_int_distribution<int> ( -1000, +1000 ) ( rng );
     }
 
+    for ( auto & e : v ) {
+        std::cout << e << ' ';
+    }
+    std::cout << nl;
+    std::cout << nl;
+
+    auto x = v.view ( -14 );
+
+    for ( auto & e : x ) {
+        std::cout << e << ' ';
+    }
+    std::cout << nl;
+
+    /*
     plf::nanotimer timer;
 
     std::uint64_t x = 0;
@@ -69,6 +83,7 @@ int main ( ) {
 
     std::cout << x << nl;
     std::cout << t << nl;
+    */
 
     return EXIT_SUCCESS;
 }

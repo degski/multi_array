@@ -26,8 +26,9 @@
 #include <cassert> // assert
 #include <cstddef> // std::size_t
 #include <cstdint> // int
-#include <cstring> // std::memcpy
+#include <cstring> // std::memcpy, std::memcmp
 
+#include <span>
 #include <tuple>
 #include <type_traits>
 #include <utility> // std::forward
@@ -209,6 +210,8 @@ class Matrix {
     }
     [[nodiscard]] bool operator!= ( Matrix const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
 
+    [[nodiscard]] std::span<T> view ( int const i_ ) noexcept { return { ( m_data + rebase ( ) + BaseJ ) + i_ * J, J }; }
+
     [[nodiscard]] reference fat ( int const i_, int const j_ ) noexcept {
         MA_ASSERT_2
         return ( m_data + rebase ( ) )[ j_ + i_ * J ];
@@ -298,6 +301,13 @@ class Cube {
         return std::memcmp ( m_data, rhs_.m_data, size ( ) * sizeof ( T ) ) == 0;
     }
     [[nodiscard]] bool operator!= ( Cube const & rhs_ ) noexcept { return not operator== ( rhs_ ); };
+
+    [[nodiscard]] std::span<T> view ( int const i_ ) noexcept {
+        return { ( m_data + rebase ( ) + BaseJ * K ) + i_ * ( J * K ) + BaseK, J * K };
+    }
+    [[nodiscard]] std::span<T> view ( int const i_, int const j_ ) noexcept {
+        return { ( m_data + rebase ( ) ) + K * ( j_ + i_ * J ) + BaseK, K };
+    }
 
     [[nodiscard]] reference fat ( int const i_, int const j_, int const k_ ) noexcept {
         MA_ASSERT_3
